@@ -1,0 +1,71 @@
+{% extends 'quiz/base.html' %}
+
+{% block extra_css %}
+<style>
+    .result-score {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+        color: #333;
+    }
+    .review-item {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+    .correct {
+        color: green;
+        font-weight: bold;
+    }
+    .incorrect {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Quiz Completed!</h1>
+<div class="result-score">
+    Your Final Score: {{ score }} / {{ total }}
+</div>
+
+<div>
+    <h3>Review your answers:</h3>
+    {% for ans in page_obj %}
+    <div class="review-item">
+        <p><strong>{{ ans.number }}. {{ ans.question }}</strong></p>
+        <p>
+            Your answer: 
+            <span class="{% if ans.is_correct %}correct{% else %}incorrect{% endif %}">
+                {{ ans.selected_answer }}
+            </span>
+        </p>
+        {% if not ans.is_correct %}
+        <p>Correct answer: <strong>{{ ans.correct_answer }}</strong></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination Controls -->
+<div class="pagination" style="text-align: center; margin-top: 20px; font-weight: bold;">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" style="margin-right: 5px;">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}" style="margin-right: 5px;">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" style="margin-left: 5px;">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" style="margin-left: 5px;">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<a href="{% url 'index' %}" class="btn" style="text-align: center; display: block;">Restart Quiz</a>
+{% endblock %}

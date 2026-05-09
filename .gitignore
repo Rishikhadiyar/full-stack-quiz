@@ -1,0 +1,17 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Database
+db.sqlite3
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Project specific
+django notes/

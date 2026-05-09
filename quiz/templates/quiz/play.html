@@ -1,0 +1,145 @@
+{% extends 'quiz/base.html' %}
+
+{% block extra_css %}
+<style>
+    .exam-container {
+        display: flex;
+        gap: 30px;
+    }
+    .question-area {
+        flex: 3;
+    }
+    .palette-area {
+        flex: 1;
+        border-left: 1px solid #ddd;
+        padding-left: 20px;
+    }
+    .question-info {
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #666;
+    }
+    .question-text {
+        font-size: 20px;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+    .option-label {
+        display: block;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #fafafa;
+        margin-bottom: 10px;
+        transition: background-color 0.2s;
+    }
+    .option-label:hover {
+        background-color: #f0f0f0;
+        border-color: #bbb;
+    }
+    .option-input {
+        margin-right: 10px;
+        transform: scale(1.2);
+    }
+    .action-btn {
+        padding: 12px 15px;
+        margin-right: 5px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .save-btn { background-color: #4CAF50; }
+    .review-btn { background-color: #ff9800; }
+    .clear-btn { background-color: #f44336; }
+    
+    .palette-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .palette-btn {
+        width: 35px;
+        height: 35px;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 35px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+    .not_answered { background-color: #f4f4f9; }
+    .answered { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+    .marked { background-color: #9c27b0; color: white; border-color: #9c27b0; }
+    .marked_answered { background-color: #9c27b0; color: white; border: 3px solid #4CAF50; line-height: 29px; }
+    
+    .legend {
+        margin-top: 20px;
+        font-size: 12px;
+    }
+    .legend div { margin-bottom: 5px; }
+    .legend span { display: inline-block; width: 15px; height: 15px; margin-right: 5px; vertical-align: middle; }
+    
+    @media (max-width: 768px) {
+        .exam-container { flex-direction: column; }
+        .palette-area { border-left: none; padding-left: 0; border-top: 1px solid #ddd; padding-top: 20px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="exam-container">
+    <div class="question-area">
+        <div class="question-info">
+            Question {{ question_number }} of {{ total_questions }}
+        </div>
+        <div class="question-text">
+            {{ question.question }}
+        </div>
+
+        <form method="POST" action="{% url 'submit_answer' attempt.id question_index %}">
+            {% csrf_token %}
+            {% for option in question.options %}
+            <label class="option-label" for="option{{ forloop.counter }}">
+                <input type="radio" id="option{{ forloop.counter }}" name="answer" value="{{ option }}" class="option-input" {% if current_ans == option %}checked{% endif %}>
+                {{ option }}
+            </label>
+            {% endfor %}
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" name="action" value="save_next" class="action-btn save-btn">Save & Next</button>
+                <button type="submit" name="action" value="mark_review" class="action-btn review-btn">Mark for Review & Next</button>
+                <button type="submit" name="action" value="clear" class="action-btn clear-btn">Clear Response</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="palette-area">
+        <h3 style="margin-top: 0;">Question Palette</h3>
+        <div class="palette-grid">
+            {% for p in palette %}
+            <a href="{% url 'play_quiz' attempt.id p.index %}" class="palette-btn {{ p.status }}">{{ p.number }}</a>
+            {% endfor %}
+        </div>
+        
+        <div class="legend">
+            <div><span class="not_answered" style="border: 1px solid #ccc;"></span> Not Answered</div>
+            <div><span class="answered"></span> Answered</div>
+            <div><span class="marked"></span> Marked for Review</div>
+            <div><span class="marked_answered"></span> Answered & Marked</div>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="{% url 'quit_quiz' attempt.id question_index %}" class="btn" style="background-color: #2196F3; font-size: 16px; padding: 10px;">Submit Quiz</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
