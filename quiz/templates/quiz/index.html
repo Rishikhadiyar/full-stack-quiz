@@ -2,8 +2,13 @@
 
 {% block content %}
 <h1>Full Stack Quiz</h1>
-<div style="text-align: center; margin-bottom: 20px;">
-    <p>Test your full stack development knowledge with 30 questions.</p>
+<div style="text-align: center; margin: 15px 0 25px;">
+    <p style="font-size: clamp(14px, 3.8vw, 18px); color: #555;">
+        Test your full stack development knowledge with <strong>30 questions</strong>.
+    </p>
+    <p style="font-size: clamp(13px, 3.2vw, 15px); color: #888; margin-top: 8px;">
+        Choose from 5 different question sets — randomized every time!
+    </p>
 </div>
 <a href="{% url 'start_quiz' %}" class="btn">Start Quiz</a>
 {% endblock %}

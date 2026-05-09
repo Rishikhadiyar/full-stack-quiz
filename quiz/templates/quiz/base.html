@@ -5,38 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Full Stack Quiz</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             color: #333;
-            margin: 0;
-            padding: 20px;
-            font-size: 16px;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+            padding: 15px;
         }
         .container {
-            max-width: 1000px;
             width: 100%;
+            max-width: 1000px;
             background: white;
-            padding: 25px;
+            padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            box-sizing: border-box;
         }
         h1 {
             text-align: center;
             color: #4CAF50;
-            font-size: 28px;
+            font-size: clamp(20px, 5vw, 28px);
             margin-bottom: 15px;
-            margin-top: 0;
+        }
+        h2 {
+            font-size: clamp(16px, 4vw, 22px);
+        }
+        h3 {
+            font-size: clamp(14px, 3.5vw, 18px);
+        }
+        p {
+            font-size: clamp(14px, 3.5vw, 16px);
+            line-height: 1.5;
         }
         .btn {
-            display: inline-block;
+            display: block;
             background-color: #4CAF50;
             color: white;
             padding: 12px 20px;
@@ -46,12 +56,18 @@
             border-radius: 6px;
             cursor: pointer;
             width: 100%;
-            font-size: 18px;
+            font-size: clamp(15px, 4vw, 18px);
             margin-top: 20px;
-            box-sizing: border-box;
         }
         .btn:hover {
             background-color: #45a049;
+        }
+        /* Responsive utility */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                border-radius: 6px;
+            }
         }
     </style>
     {% block extra_css %}{% endblock %}

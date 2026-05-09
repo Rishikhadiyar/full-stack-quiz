@@ -3,69 +3,91 @@
 {% block extra_css %}
 <style>
     .result-score {
-        font-size: 24px;
+        font-size: clamp(18px, 5vw, 26px);
         font-weight: bold;
         text-align: center;
-        margin: 20px 0;
+        margin: 15px 0 25px;
         color: #333;
+        background: #f0f9f0;
+        padding: 14px;
+        border-radius: 8px;
+        border: 2px solid #4CAF50;
     }
     .review-item {
         border-bottom: 1px solid #eee;
-        padding: 10px 0;
+        padding: 12px 0;
+        word-break: break-word;
     }
-    .correct {
-        color: green;
-        font-weight: bold;
+    .review-item p {
+        margin: 4px 0;
+        font-size: clamp(13px, 3.5vw, 16px);
     }
-    .incorrect {
-        color: red;
+    .correct  { color: green; font-weight: bold; }
+    .incorrect{ color: red;   font-weight: bold; }
+
+    /* Pagination bar */
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+        font-size: clamp(14px, 3.5vw, 16px);
+    }
+    .pagination a {
+        color: #2196F3;
+        text-decoration: none;
+        padding: 6px 10px;
+        border: 1px solid #2196F3;
+        border-radius: 4px;
+        margin: 3px;
+        display: inline-block;
+    }
+    .pagination a:hover { background: #2196F3; color: white; }
+    .pagination .current {
+        display: inline-block;
+        padding: 6px 10px;
         font-weight: bold;
+        margin: 3px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <h1>Quiz Completed!</h1>
+
 <div class="result-score">
     Your Final Score: {{ score }} / {{ total }}
 </div>
 
-<div>
-    <h3>Review your answers:</h3>
-    {% for ans in page_obj %}
-    <div class="review-item">
-        <p><strong>{{ ans.number }}. {{ ans.question }}</strong></p>
-        <p>
-            Your answer: 
-            <span class="{% if ans.is_correct %}correct{% else %}incorrect{% endif %}">
-                {{ ans.selected_answer }}
-            </span>
-        </p>
-        {% if not ans.is_correct %}
-        <p>Correct answer: <strong>{{ ans.correct_answer }}</strong></p>
-        {% endif %}
-    </div>
-    {% endfor %}
+<h3 style="margin-bottom:10px;">Review your answers:</h3>
+
+{% for ans in page_obj %}
+<div class="review-item">
+    <p><strong>{{ ans.number }}. {{ ans.question }}</strong></p>
+    <p>
+        Your answer:
+        <span class="{% if ans.is_correct %}correct{% else %}incorrect{% endif %}">
+            {{ ans.selected_answer }}
+        </span>
+    </p>
+    {% if not ans.is_correct %}
+    <p>Correct answer: <strong>{{ ans.correct_answer }}</strong></p>
+    {% endif %}
 </div>
+{% endfor %}
 
 <!-- Pagination Controls -->
-<div class="pagination" style="text-align: center; margin-top: 20px; font-weight: bold;">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1" style="margin-right: 5px;">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}" style="margin-right: 5px;">previous</a>
-        {% endif %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" style="margin-left: 5px;">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" style="margin-left: 5px;">last &raquo;</a>
-        {% endif %}
-    </span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% endif %}
 </div>
 
-<a href="{% url 'index' %}" class="btn" style="text-align: center; display: block;">Restart Quiz</a>
+<a href="{% url 'index' %}" class="btn">Restart Quiz</a>
 {% endblock %}
