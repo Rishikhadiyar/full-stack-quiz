@@ -1,14 +1,18 @@
 {% extends 'quiz/base.html' %}
 
+{% block body_class %}center-page{% endblock %}
+
 {% block content %}
 <h1 style="color: #2196F3;">Submit Quiz?</h1>
-<div style="text-align: center; margin-bottom: 30px; font-size: 18px;">
+<div style="text-align: center; margin-bottom: 25px; font-size: clamp(14px, 4vw, 18px);">
     <p>Are you sure you want to submit and end the quiz?</p>
-    <p style="color: #666;">You have answered <strong>{{ answered_count }}</strong> out of <strong>{{ attempt.questions_data|length }}</strong> questions.</p>
+    <p style="color: #666; margin-top: 10px;">
+        You have answered <strong>{{ answered_count }}</strong> out of <strong>{{ attempt.questions_data|length }}</strong> questions.
+    </p>
 </div>
 
-<div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-    <a href="{% url 'quiz_result' attempt.id %}" class="btn" style="background-color: #4CAF50; margin-top: 0; width: auto; flex: 1; min-width: 150px;">Yes, Submit Quiz</a>
-    <a href="{% url 'play_quiz' attempt.id question_index %}" class="btn" style="background-color: #9e9e9e; margin-top: 0; width: auto; flex: 1; min-width: 150px;">Cancel (Back to Quiz)</a>
+<div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <a href="{% url 'quiz_result' attempt.id %}" class="btn" style="background-color: #4CAF50; margin-top: 0; flex: 1; min-width: 140px;">Yes, Submit Quiz</a>
+    <a href="{% url 'play_quiz' attempt.id question_index %}" class="btn" style="background-color: #9e9e9e; margin-top: 0; flex: 1; min-width: 140px;">Cancel (Back to Quiz)</a>
 </div>
 {% endblock %}

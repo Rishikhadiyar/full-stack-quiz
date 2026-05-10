@@ -25,27 +25,37 @@
     .correct  { color: green; font-weight: bold; }
     .incorrect{ color: red;   font-weight: bold; }
 
-    /* Pagination bar */
+    /* ── Pagination ── */
     .pagination {
-        text-align: center;
-        margin-top: 20px;
-        font-size: clamp(14px, 3.5vw, 16px);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin: 20px 0;
     }
     .pagination a {
         color: #2196F3;
         text-decoration: none;
-        padding: 6px 10px;
+        padding: 7px 12px;
         border: 1px solid #2196F3;
-        border-radius: 4px;
-        margin: 3px;
-        display: inline-block;
+        border-radius: 5px;
+        font-size: clamp(13px, 3.5vw, 15px);
+        white-space: nowrap;
     }
-    .pagination a:hover { background: #2196F3; color: white; }
+    .pagination a:hover {
+        background: #2196F3;
+        color: white;
+    }
     .pagination .current {
-        display: inline-block;
-        padding: 6px 10px;
+        padding: 7px 12px;
         font-weight: bold;
-        margin: 3px;
+        font-size: clamp(13px, 3.5vw, 15px);
+        color: #333;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+        white-space: nowrap;
     }
 </style>
 {% endblock %}
@@ -57,7 +67,7 @@
     Your Final Score: {{ score }} / {{ total }}
 </div>
 
-<h3 style="margin-bottom:10px;">Review your answers:</h3>
+<h3 style="margin-bottom: 10px;">Review your answers:</h3>
 
 {% for ans in page_obj %}
 <div class="review-item">
@@ -78,13 +88,13 @@
 <div class="pagination">
     {% if page_obj.has_previous %}
         <a href="?page=1">&laquo; First</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        <a href="?page={{ page_obj.previous_page_number }}">&#8249; Prev</a>
     {% endif %}
 
     <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.next_page_number }}">Next &#8250;</a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
     {% endif %}
 </div>

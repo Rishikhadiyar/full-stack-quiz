@@ -10,16 +10,27 @@
             margin: 0;
             padding: 0;
         }
+
+        /* Default: allow scroll (needed for quiz & result pages) */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             color: #333;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             padding: 15px;
         }
+
+        /* Only on pages that declare no-scroll, perfectly center */
+        body.center-page {
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            padding: 12px;
+        }
+
         .container {
             width: 100%;
             max-width: 1000px;
@@ -29,14 +40,12 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
         h1 {
             text-align: center;
             color: #4CAF50;
             font-size: clamp(20px, 5vw, 28px);
             margin-bottom: 15px;
-        }
-        h2 {
-            font-size: clamp(16px, 4vw, 22px);
         }
         h3 {
             font-size: clamp(14px, 3.5vw, 18px);
@@ -45,6 +54,7 @@
             font-size: clamp(14px, 3.5vw, 16px);
             line-height: 1.5;
         }
+
         .btn {
             display: block;
             background-color: #4CAF50;
@@ -59,23 +69,17 @@
             font-size: clamp(15px, 4vw, 18px);
             margin-top: 20px;
         }
-        .btn:hover {
-            background-color: #45a049;
-        }
-        /* Responsive utility */
+        .btn:hover { background-color: #45a049; }
+
         @media (max-width: 480px) {
-            .container {
-                padding: 15px;
-                border-radius: 6px;
-            }
+            .container { padding: 15px; border-radius: 6px; }
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <div class="container">
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </div>
 </body>
 </html>
