@@ -28,34 +28,33 @@
     /* ── Pagination ── */
     .pagination {
         display: flex;
-        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
         gap: 6px;
         margin: 20px 0;
+        flex-wrap: nowrap;
     }
     .pagination a {
         color: #2196F3;
         text-decoration: none;
-        padding: 7px 12px;
+        padding: 6px 10px;
         border: 1px solid #2196F3;
         border-radius: 5px;
-        font-size: clamp(13px, 3.5vw, 15px);
+        font-size: clamp(12px, 3vw, 14px);
         white-space: nowrap;
+        flex-shrink: 0;
     }
-    .pagination a:hover {
-        background: #2196F3;
-        color: white;
-    }
+    .pagination a:hover { background: #2196F3; color: white; }
     .pagination .current {
-        padding: 7px 12px;
+        padding: 6px 10px;
         font-weight: bold;
-        font-size: clamp(13px, 3.5vw, 15px);
+        font-size: clamp(12px, 3vw, 14px);
         color: #333;
         border: 1px solid #ddd;
         border-radius: 5px;
         background: #f9f9f9;
         white-space: nowrap;
+        flex-shrink: 0;
     }
 </style>
 {% endblock %}
@@ -87,15 +86,15 @@
 <!-- Pagination Controls -->
 <div class="pagination">
     {% if page_obj.has_previous %}
-        <a href="?page=1">&laquo; First</a>
+        <a href="?page=1">&laquo;</a>
         <a href="?page={{ page_obj.previous_page_number }}">&#8249; Prev</a>
     {% endif %}
 
-    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}">Next &#8250;</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
     {% endif %}
 </div>
 
