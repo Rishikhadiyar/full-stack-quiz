@@ -13,7 +13,13 @@ def start_quiz(request):
     try:
         # Pick a random set out of the 5 available
         selected_set = random.choice(QUIZ_SETS)
-        
+
+        # Guard: ensure we actually have questions
+        if not selected_set:
+            return render(request, 'quiz/error.html', {
+                'message': 'No questions found. Please check questions.py.'
+            })
+
         # Load and shuffle questions for this specific attempt
         questions = []
         for item in selected_set:
@@ -21,31 +27,41 @@ def start_quiz(request):
             assert isinstance(incorrect, list)
             options = incorrect + [item['correct_answer']]
             random.shuffle(options)
-            
+
             questions.append({
                 'question': item['question'],
                 'correct_answer': item['correct_answer'],
                 'options': options
             })
-            
+
+        # Final safety check before saving to DB
+        if len(questions) == 0:
+            return render(request, 'quiz/error.html', {
+                'message': 'Questions failed to load. Please restart the server.'
+            })
+
         # Create a new quiz attempt in the database
         attempt = QuizAttempt.objects.create(
             questions_data=questions,
             score=0,
             current_index=0,
-            # Pre-allocate tracking data for all 30 questions
             user_answers=[{'selected_answer': None, 'is_marked': False} for _ in range(len(questions))]
         )
-        
+
         return redirect('play_quiz', attempt_id=attempt.id, question_index=0)
-        
+
     except Exception as e:
         return render(request, 'quiz/error.html', {'message': str(e)})
 
 def play_quiz(request, attempt_id, question_index):
     """ Displays the current question and the exam palette """
     attempt = get_object_or_404(QuizAttempt, id=attempt_id)
-    
+
+    # Guard: if this is a broken/empty attempt, send back to home
+    if not attempt.questions_data:
+        return redirect('index')
+
+    # If somehow index is out of range, go to result
     if question_index >= len(attempt.questions_data):
         return redirect('quiz_result', attempt_id=attempt.id)
         
